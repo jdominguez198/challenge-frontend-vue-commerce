@@ -44,7 +44,13 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    headers: {
+      common: {
+        'Authorization': `Bearer ${process.env.API_TOKEN}`
+      }
+    }
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -61,7 +67,6 @@ export default {
   },
 
   publicRuntimeConfig: {
-    apiBaseUrl: 'https://api.themoviedb.org/3/',
-    apiToken: process.env.API_TOKEN || null
+    apiBaseUrl: 'https://api.themoviedb.org/3/'
   }
 }
