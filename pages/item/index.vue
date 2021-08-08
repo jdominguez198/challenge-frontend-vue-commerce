@@ -1,6 +1,6 @@
 <template>
-  <div class="page page__home">
-    <p>Home page</p>
+  <div class="page page__item">
+    <p>Item page</p>
   </div>
 </template>
 

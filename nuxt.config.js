@@ -58,5 +58,10 @@ export default {
     babel: {
       plugins: [['@babel/plugin-proposal-private-property-in-object', { loose: true }]],
     }
+  },
+
+  publicRuntimeConfig: {
+    apiBaseUrl: 'https://api.themoviedb.org/3/',
+    apiToken: process.env.API_TOKEN || null
   }
 }
