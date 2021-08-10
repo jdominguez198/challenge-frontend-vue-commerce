@@ -18,6 +18,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/styles/styles.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -33,6 +34,10 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    // https://github.com/nuxt-community/fontawesome-module
+    '@nuxtjs/fontawesome',
+    // https://google-fonts.nuxtjs.org/setup
+    '@nuxtjs/google-fonts',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -43,11 +48,22 @@ export default {
     '@nuxtjs/pwa',
   ],
 
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue')
+      })
+    }
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     headers: {
       common: {
-        'Authorization': `Bearer ${process.env.API_TOKEN}`
+        // 'Authorization': `Bearer ${process.env.API_TOKEN}`
+        'X-Api-Key': process.env.API_TOKEN
       }
     }
   },
@@ -59,6 +75,19 @@ export default {
     }
   },
 
+  fontawesome: {
+    icons: {
+      solid: ['faShoppingCart', 'faSearch'],
+    }
+  },
+
+  googleFonts: {
+    display: 'swap',
+    families: {
+      Roboto: [ 100, 300, 400, 800],
+    }
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {
@@ -67,6 +96,6 @@ export default {
   },
 
   publicRuntimeConfig: {
-    apiBaseUrl: 'https://api.themoviedb.org/3/'
+    apiBaseUrl: 'https://api.pokemontcg.io/v2'
   }
 }
