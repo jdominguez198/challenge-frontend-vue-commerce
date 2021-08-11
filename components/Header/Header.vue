@@ -20,7 +20,11 @@
             v-for="actionItem in actionItems"
             :key="actionItem.slug"
           >
-            <font-awesome-icon :icon="actionItem.icon" class="header__actions-item" />
+            <font-awesome-icon
+              :icon="actionItem.icon"
+              class="header__actions-item"
+              @click="actionItem.action"
+            />
           </li>
         </ul>
       </div>

@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 import { UiState } from '~/store/ui/state';
 
-export const mutations:MutationTree<UiState> = {
+export const mutations: MutationTree<UiState> = {
   OPEN_SIDEBAR_CART: (state: UiState) => {
     state.sidebarCartOpen = true;
   },

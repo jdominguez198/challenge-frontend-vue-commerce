@@ -40,11 +40,20 @@ export default Vue.extend({
     hp: {
       type: String,
       default: null
+    },
+    price: {
+      type: Number,
+      default: null
     }
   },
   methods: {
     handleAddToCart() {
-      this.$emit('click:add-to-cart', { id: this.id });
+      this.$emit('click:add-to-cart', {
+        id: this.id,
+        image: this.image,
+        name: this.name,
+        price: this.price
+      });
     }
   }
 });

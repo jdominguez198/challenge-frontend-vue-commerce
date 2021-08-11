@@ -3,12 +3,33 @@ import { CatalogState } from '~/store/catalog/state';
 
 export const mutations: MutationTree<CatalogState> = {
   SET_CATEGORIES: (state: CatalogState, categories: any) => {
-    state.categories = [ ...categories ];
+    state.categories = categories.reduce((output: any, item: any) => ({
+      ...output,
+      [item.id]: {
+        ...item,
+        children: {}
+      }
+    }), {});
   },
-  SET_ITEMS: (state: CatalogState, { items, category }: any) => {
+  SET_CATEGORY_ITEMS: (state: CatalogState, { items, categoryId, page, totalCount }: any) => {
+    state.categories[categoryId] = {
+      ...(state.categories[categoryId] || {}),
+      page,
+      totalCount,
+      totalPages: Math.ceil(totalCount / state.itemsPerPage),
+      pages: {
+        ...(state.categories[categoryId] && state.categories[categoryId].pages || {}),
+        [parseInt(page)]: items.reduce((output: any, item: any) => ({
+          ...output,
+          [item.id]: item
+        }), {})
+      }
+    };
+  },
+  SET_ITEM: (state: CatalogState, item: any) => {
     state.items = {
       ...state.items,
-      [category]: items
+      [item.id]: item
     };
   }
 };

@@ -17,21 +17,52 @@ export const actions: ActionTree<CatalogState, CatalogState> = {
 
     commit('SET_CATEGORIES', categories);
   },
-  async fetchItems ({ commit }, category) {
-    const pageSize = 20;
-    const url = `${this.app.$config.apiBaseUrl}/cards?pageSize=${pageSize}&q=set.id:${category}`;
+  async fetchCategoryItems ({ state, commit }, { categoryId, page = 1}) {
+    const pageSize = state.itemsPerPage;
+    const url = `${this.app.$config.apiBaseUrl}/cards?pageSize=${pageSize}&page=${page}&q=set.id:${categoryId}`;
     const result = await this.$axios.$get(url);
     const items = result.data.map((item: any) => {
       return {
         id: item.id,
         name: item.name,
+        category: {
+          id: item.set.id,
+          name: item.set.name
+        },
         image: item.images.small,
         level: item.level,
-        hp: item.hp
+        hp: item.hp,
+        price: item.cardmarket.prices.trendPrice || 9999.99
       };
     });
+    const { page: currentPage, totalCount } = result;
 
-    commit('SET_ITEMS', { items, category });
+    commit('SET_CATEGORY_ITEMS', { items, categoryId, page: currentPage, totalCount });
+  },
+  async fetchItemDetails ({ commit }, itemId: string) {
+    const url = `${this.app.$config.apiBaseUrl}/cards/${itemId}`;
+    const result = await this.$axios.$get(url);
+    const item = {
+      id: result.data.id,
+      name: result.data.name,
+      hp: result.data.hp,
+      types: result.data.types,
+      evolvesTo: result.data.evolvesTo,
+      attacks: result.data.attacks,
+      weaknesses: result.data.weaknesses,
+      set: result.data.set,
+      images: result.data.images,
+      price: result.data.cardmarket.prices.trendPrice || 9999.99
+    };
+
+    commit('SET_ITEM', item);
+  },
+  findItem: ({ state }, { itemId, withDetails = false}) => {
+    return Object.keys(state.categories).find((category: any) => {
+      return Object.keys(state.categories[category].pages).find((page: string) => {
+        return state.categories[category].pages[page].id === itemId
+      });
+    })
   }
 };
 
