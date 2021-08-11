@@ -56,13 +56,6 @@ export const actions: ActionTree<CatalogState, CatalogState> = {
     };
 
     commit('SET_ITEM', item);
-  },
-  findItem: ({ state }, { itemId, withDetails = false}) => {
-    return Object.keys(state.categories).find((category: any) => {
-      return Object.keys(state.categories[category].pages).find((page: string) => {
-        return state.categories[category].pages[page].id === itemId
-      });
-    })
   }
 };
 

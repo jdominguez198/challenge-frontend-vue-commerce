@@ -55,39 +55,18 @@ export default {
   },
   computed: ({
     ...mapGetters({
-      categories: 'catalog/categories',
       sidebarCartOpen: 'ui/sidebarCartOpen',
       cartItems: 'cart/items',
       cartSubtotal: 'cart/subtotal',
       cartTaxes: 'cart/taxes',
       cartTotal: 'cart/total',
       cartCurrency: 'cart/currency'
-    }),
-    items () {
-      return this.cartItems.map((item: any) => {
-        const found = Object.keys(this.categories).reduce((output: any, category: any) => {
-          const inPage = Object.keys(this.categories[category].pages).find((page: string) => {
-            return this.categories[category].pages[page][item.id]
-          });
-
-          return inPage && this.categories[category].pages[inPage][item.id] || output;
-        }, null)
-
-        return {
-          ...item,
-          ...(found && found.name && {
-            name: found.name,
-            image: found.image
-          })
-        }
-      });
-    }
+    })
   }),
   methods: {
     ...mapActions({
       toggleCart: 'ui/toggleSidebarCart',
-      closeCart: 'ui/closeSidebarCart',
-      findItem: 'catalog/findItem'
+      closeCart: 'ui/closeSidebarCart'
     })
   }
 }
