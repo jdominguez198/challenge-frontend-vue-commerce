@@ -77,7 +77,11 @@ export default Vue.extend({
       cartCurrency: 'cart/currency'
     }),
     prettyBaseUrl () {
-      const baseUrl = (this.$isServer && this.$ssrContext.req && this.$ssrContext.req.headers.host) || window.location.host;
+      if (process.browser) {
+        return window.location.origin;
+      }
+
+      const baseUrl = this.$isServer && this.$ssrContext.req && this.$ssrContext.req.headers.host;
 
       return `//${baseUrl}/`;
     },

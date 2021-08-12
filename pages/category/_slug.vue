@@ -29,7 +29,7 @@ export default Vue.extend({
   scrollToTop: true,
   asyncData(ctx) {
     return {
-      baseUrl: ctx.req && ctx.req.headers.host || window.location.host
+      baseUrl: process.browser && window.location.host || ctx.req && ctx.req.headers.host
     }
   },
   async fetch() {
