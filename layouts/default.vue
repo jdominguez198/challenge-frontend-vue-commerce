@@ -1,7 +1,7 @@
 <template>
   <div class="app-layout">
     <Header
-      title="Challenge Commerce"
+      :title="appTitle"
       :search-term="searchTerm"
       :cart-total-items="cartTotalItems"
       @search:term-change="handleSearch"
@@ -40,6 +40,7 @@ export default Vue.extend({
   components: { SidebarCart, Header },
   data () {
     return {
+      appTitle: 'Challenge Commerce',
       searchTermBouncer: null,
       navigationItems: [
         {
@@ -49,6 +50,21 @@ export default Vue.extend({
         }
       ]
     }
+  },
+  head () {
+    return {
+      script: [
+        {
+          type: 'application/ld+json',
+          json: {
+            '@context': 'https://schema.org',
+            '@type': 'Website',
+            name: this.appTitle,
+            url: this.prettyBaseUrl
+          }
+        }
+      ]
+    };
   },
   computed: ({
     ...mapGetters({
@@ -60,6 +76,11 @@ export default Vue.extend({
       cartTotal: 'cart/total',
       cartCurrency: 'cart/currency'
     }),
+    prettyBaseUrl () {
+      const baseUrl = (this.$isServer && this.$ssrContext.req && this.$ssrContext.req.headers.host) || window.location.host;
+
+      return `//${baseUrl}/`;
+    },
     searchTerm () {
       return this.$route.path === '/search' && this.$route.query.q || '';
     }

@@ -91,7 +91,7 @@ export default {
   googleFonts: {
     display: 'swap',
     families: {
-      Roboto: [ 100, 300, 700, 900],
+      Roboto: [ 100, 300, 400, 700, 900],
     }
   },
 

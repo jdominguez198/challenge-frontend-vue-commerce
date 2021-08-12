@@ -1,23 +1,24 @@
 <template>
   <p v-if="$fetchState.pending">Loading...</p>
-  <div
-    v-else
-    class="page__item"
-  >
-    <ItemDetail
-      :sku="itemDetails.id"
-      :name="itemDetails.name"
-      :price="itemDetails.price"
-      :currency="currency"
-      :image="itemDetails.largeImage"
-      :category-id="itemDetails.category && itemDetails.category.id"
-      :category-name="itemDetails.category && itemDetails.category.name"
-      :level="itemDetails.level"
-      :attacks="itemDetails.attacks"
-      :weaknesses="itemDetails.weaknesses"
-      :hp="itemDetails.hp"
-      @click:add-to-cart="handleAddToCart"
-    />
+  <div v-else>
+    <Breadcrumbs :items="breadcrumbs" :base-url="baseUrl" />
+    <div class="page__item">
+      <ItemDetail
+        :base-url="baseUrl"
+        :sku="itemDetails.id"
+        :name="itemDetails.name"
+        :price="itemDetails.price"
+        :currency="currency"
+        :image="itemDetails.largeImage"
+        :category-id="itemDetails.category && itemDetails.category.id"
+        :category-name="itemDetails.category && itemDetails.category.name"
+        :level="itemDetails.level"
+        :attacks="itemDetails.attacks"
+        :weaknesses="itemDetails.weaknesses"
+        :hp="itemDetails.hp"
+        @click:add-to-cart="handleAddToCart"
+      />
+    </div>
   </div>
 </template>
 
@@ -25,13 +26,19 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import ItemDetail from '~/components/ItemDetail/ItemDetail.vue';
+import Breadcrumbs from '~/components/Breadcrumbs/Breadcrumbs.vue';
 
 export default Vue.extend({
-  components: { ItemDetail },
+  components: { Breadcrumbs, ItemDetail },
   beforeRouteEnter(to, _, next) {
     return !to.params.slug ? next('/') : next();
   },
   scrollToTop: true,
+  asyncData(ctx) {
+    return {
+      baseUrl: ctx.req && ctx.req.headers.host || window.location.host
+    }
+  },
   async fetch() {
     await this.fetchItemDetails(this.$route.params.slug);
   },
@@ -44,6 +51,24 @@ export default Vue.extend({
       const id = this.$route.params.slug;
 
       return this.items[id] || {};
+    },
+    breadcrumbs () {
+      if (!this.itemDetails || !this.itemDetails.category) {
+        return;
+      }
+
+      return [
+        {
+          type: 'link',
+          link: `/category/${this.itemDetails.category.id}`,
+          label: this.itemDetails.category.name
+        },
+        {
+          type: 'text',
+          label: this.itemDetails.name,
+          link: this.$route.fullPath
+        }
+      ];
     }
   },
   methods: {

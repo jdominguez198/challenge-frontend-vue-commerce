@@ -50,6 +50,10 @@ import { notifyAddedToCart } from '~/utils/notifyAddedToCart';
 
 export default Vue.extend({
   props: {
+    baseUrl: {
+      type: String,
+      default: ''
+    },
     sku: {
       type: String,
       default: ''
@@ -96,6 +100,9 @@ export default Vue.extend({
     }
   },
   data () {
+    const tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate() + 1);
+
     return {
       addToCartNotification: {
         timer: null,
@@ -103,8 +110,38 @@ export default Vue.extend({
         addedText: 'Added!',
         source: 'Add to Cart',
         isAdding: false
+      },
+      structuredData: {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: this.name,
+        image: this.image,
+        sku: this.sku,
+        description: this.name,
+        category: [ this.categoryName ],
+        itemCondition: 'https://schema.org/NewCondition',
+        offers: {
+          '@type': 'Offer',
+          category: [ this.categoryName ],
+          priceCurrency: this.currency,
+          price: this.price,
+          priceValidUntil: tomorrow.toISOString(),
+          itemCondition: 'https://schema.org/NewCondition',
+          availability: 'inStock',
+          sku: this.sku
+        }
       }
     }
+  },
+  head() {
+    return {
+      script: [
+        {
+          type: 'application/ld+json',
+          json: { ...this.structuredData }
+        }
+      ]
+    };
   },
   computed: {
     descriptionItems () {

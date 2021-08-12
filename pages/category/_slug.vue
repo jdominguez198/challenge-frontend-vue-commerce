@@ -1,15 +1,17 @@
 <template>
   <div class="page__category">
     <p v-if="$fetchState.pending">Loading...</p>
-    <ItemsGrid
-      v-else
-      :items="categoryItems"
-      :route="$route"
-      :route-resolver="$router.resolve"
-      :total-pages="totalPages"
-      :currency="currency"
-      @click:add-to-cart="handleAddToCart"
-    />
+    <div v-else>
+      <Breadcrumbs :items="breadcrumbs" :base-url="baseUrl" />
+      <ItemsGrid
+        :items="categoryItems"
+        :route="$route"
+        :route-resolver="$router.resolve"
+        :total-pages="totalPages"
+        :currency="currency"
+        @click:add-to-cart="handleAddToCart"
+      />
+    </div>
   </div>
 </template>
 
@@ -17,13 +19,19 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import ItemsGrid from '~/components/ItemsGrid/ItemsGrid.vue';
+import Breadcrumbs from '~/components/Breadcrumbs/Breadcrumbs.vue';
 
 export default Vue.extend({
-  components: { ItemsGrid },
+  components: { Breadcrumbs, ItemsGrid },
   beforeRouteEnter(to, _, next) {
     return !to.params.slug ? next('/') : next();
   },
   scrollToTop: true,
+  asyncData(ctx) {
+    return {
+      baseUrl: ctx.req && ctx.req.headers.host || window.location.host
+    }
+  },
   async fetch() {
     await this.fetchCategoryItems({
       categoryId: this.$route.params.slug,
@@ -50,6 +58,27 @@ export default Vue.extend({
     },
     totalPages () {
       return parseInt(this.pagesInCategory(this.$route.params.slug)) || 1;
+    },
+    breadcrumbs () {
+      const category = this.$route.params.slug;
+      let categoryName = this.categories[category] && this.categories[category].name || null;
+
+      if (!categoryName) {
+        const page = parseInt(`${this.$route.query.p}`) || 1;
+        if (this.categories[category] && this.categories[category].pages && this.categories[category].pages[page]) {
+          const itemKeys = Object.keys(this.categories[category].pages[page]);
+          const firstItem = this.categories[category].pages[page][itemKeys[0]];
+          categoryName = firstItem && firstItem.category && firstItem.category.name || null;
+        }
+      }
+
+      return [
+        {
+          type: 'text',
+          label: categoryName || 'Unknown',
+          link: this.$route.fullPath
+        }
+      ];
     }
   },
   watch: {
