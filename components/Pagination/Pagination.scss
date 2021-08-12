@@ -5,6 +5,8 @@
   &__wrapper {
     display: flex;
     flex-direction: column;
+    background: var(--color-background-secondary);
+    padding: 10px 0;
   }
 
   &__items {

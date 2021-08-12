@@ -20,12 +20,13 @@ import ItemsGrid from '~/components/ItemsGrid/ItemsGrid.vue';
 export default Vue.extend({
   components: { ItemsGrid },
   beforeRouteEnter(to, _, next) {
-    if (!to.query.q) {
+    if (!to.query.q || to.query.p === '') {
       return next('/');
     }
 
     return next();
   },
+  scrollToTop: true,
   async fetch() {
     if (!this.$route.query.q) {
       return;
@@ -48,8 +49,13 @@ export default Vue.extend({
   },
   watch: {
     '$route' (route) {
-      if (route.path === '/search' && route.query.q && route.query.q.length > 0) {
-        this.$fetch();
+      if (route.path === '/search') {
+        if (route.query.q && route.query.q.length > 0) {
+          this.$fetch();
+          return;
+        }
+
+        this.$router.push('/');
       }
     }
   },

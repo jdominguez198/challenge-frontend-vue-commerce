@@ -1,10 +1,11 @@
 <template>
   <div class="app-layout">
     <Header
+      title="Challenge Commerce"
       :search-term="searchTerm"
-      :navigation-items="navigationItems"
-      :action-items="actionItems"
-      @search-term-change="handleSearch"
+      :cart-total-items="cartTotalItems"
+      @search:term-change="handleSearch"
+      @cart:toggle="toggleCart"
     />
     <div class="page">
       <div class="page__wrapper">
@@ -61,16 +62,6 @@ export default Vue.extend({
     }),
     searchTerm () {
       return this.$route.path === '/search' && this.$route.query.q || '';
-    },
-    actionItems () {
-      return [
-        {
-          slug: 'cart',
-          icon: 'shopping-cart',
-          label: this.cartTotalItems > 0 ? `(${this.cartTotalItems})` : '',
-          action: () => this.toggleCart()
-        },
-      ]
     }
   }),
   beforeCreate() {

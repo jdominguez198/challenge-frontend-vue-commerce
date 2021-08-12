@@ -16,6 +16,7 @@
             :name="item.name"
             :image="item.image"
             :price="item.price"
+            :currency="currency"
             :level="item.level"
             :hp="item.hp"
             @click:add-to-cart="handleAddToCart"
@@ -52,6 +53,10 @@ export default Vue.extend({
     items: {
       type: Array,
       required: true
+    },
+    currency: {
+      type: String,
+      default: ''
     },
     totalPages: {
       type: Number,

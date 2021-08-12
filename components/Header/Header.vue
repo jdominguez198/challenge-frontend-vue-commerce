@@ -1,41 +1,32 @@
 <template>
   <div class="header">
     <div class="header__wrapper">
-      <div class="header__navigation">
-        <ul>
-          <li
-            v-for="navigationItem in navigationItems"
-            :key="navigationItem.slug"
-          >
-            <NuxtLink
-              :to="navigationItem.link"
-              class="header__navigation-item"
-            >{{navigationItem.label}}</NuxtLink>
-          </li>
-        </ul>
+      <div class="header__logo">
+        <NuxtLink to="/" class="header__logo-item">
+          <img src="/logo.png" :alt="title" :title="title" class="header__logo-image" />
+        </NuxtLink>
       </div>
       <div class="header__search">
-        <input
-          type="text"
-          name="search"
-          :value="searchTerm"
-          @keyup="$emit('search-term-change', $event.target.value)"
-        />
+        <div class="header__search-input">
+          <font-awesome-icon icon="search" class="header__search-input-icon" />
+          <input
+            type="text"
+            name="search"
+            :value="searchTerm"
+            class="header__search-input-field"
+            placeholder="Type your search..."
+            @keyup="handleSearchTerm"
+          />
+        </div>
       </div>
       <div class="header__actions">
-        <ul>
-          <li
-            v-for="actionItem in actionItems"
-            :key="actionItem.slug"
-          >
-            <font-awesome-icon
-              :icon="actionItem.icon"
-              class="header__actions-item"
-              @click="actionItem.action"
-            />
-            {{ actionItem.label }}
-          </li>
-        </ul>
+        <div class="header__actions-item" @click="handleCartToggle">
+          <font-awesome-icon
+            icon="shopping-cart"
+            class="header__actions-item-icon"
+          />
+          <span class="header__actions-item-label">{{ cartBadge }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -46,17 +37,30 @@ import Vue from 'vue';
 
 export default Vue.extend({
   props: {
+    title: {
+      type: String,
+      required: true
+    },
     searchTerm: {
       type: String,
       default: ''
     },
-    navigationItems: {
-      type: Array,
+    cartTotalItems: {
+      type: Number,
       required: true
+    }
+  },
+  computed: {
+    cartBadge () {
+      return this.cartTotalItems > 0 ? `(${this.cartTotalItems})` : '';
+    }
+  },
+  methods: {
+    handleSearchTerm (event) {
+      this.$emit('search:term-change', event.target.value);
     },
-    actionItems: {
-      type: Array,
-      required: true
+    handleCartToggle () {
+      this.$emit('cart:toggle');
     }
   }
 });

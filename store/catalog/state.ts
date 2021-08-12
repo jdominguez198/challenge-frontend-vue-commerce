@@ -8,7 +8,7 @@ export interface CatalogState {
 export const state = (): CatalogState => ({
   categories: {},
   items: {},
-  itemsPerPage: 2,
+  itemsPerPage: 8,
   lastSearch: {}
 });
 

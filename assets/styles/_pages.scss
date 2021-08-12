@@ -1,7 +1,10 @@
 .page {
   display: flex;
   flex-direction: column;
+  flex: 1 0 100%;
   align-items: center;
+  padding: 20px 0;
+  background: var(--color-background-primary);
 
   &__wrapper {
     display: flex;
@@ -16,7 +19,7 @@
 
     &-items {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
 
       &-link {
         text-decoration: none;

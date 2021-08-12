@@ -4,29 +4,41 @@
     v-else
     class="page__item"
   >
-    <p>{{ itemDetails.name }}</p>
+    <ItemDetail
+      :sku="itemDetails.id"
+      :name="itemDetails.name"
+      :price="itemDetails.price"
+      :currency="currency"
+      :image="itemDetails.largeImage"
+      :category-id="itemDetails.category && itemDetails.category.id"
+      :category-name="itemDetails.category && itemDetails.category.name"
+      :level="itemDetails.level"
+      :attacks="itemDetails.attacks"
+      :weaknesses="itemDetails.weaknesses"
+      :hp="itemDetails.hp"
+      @click:add-to-cart="handleAddToCart"
+    />
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex';
+import ItemDetail from '~/components/ItemDetail/ItemDetail.vue';
 
 export default Vue.extend({
+  components: { ItemDetail },
   beforeRouteEnter(to, _, next) {
-    if (!to.params.slug) {
-      return next('/');
-    }
-
-    return next();
+    return !to.params.slug ? next('/') : next();
   },
+  scrollToTop: true,
   async fetch() {
-    // (this as any) workaround: https://github.com/vuejs/vue/issues/8721
     await this.fetchItemDetails(this.$route.params.slug);
   },
   computed: {
     ...mapGetters({
-      items: 'catalog/items'
+      items: 'catalog/items',
+      currency: 'cart/currency'
     }),
     itemDetails () {
       const id = this.$route.params.slug;
@@ -37,7 +49,17 @@ export default Vue.extend({
   methods: {
     ...mapActions({
       fetchItemDetails: 'catalog/fetchItemDetails',
+      addCartItem: 'cart/addItem'
     }),
+    handleAddToCart () {
+      this.addCartItem({
+        sku: this.itemDetails.id,
+        price: this.itemDetails.price,
+        name: this.itemDetails.name,
+        image: this.itemDetails.image,
+        qty: 1
+      });
+    }
   }
 })
 </script>

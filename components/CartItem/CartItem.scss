@@ -2,6 +2,13 @@
   display: flex;
   flex-direction: column;
   padding: 0 10px;
+  background: var(--color-background-secondary);
+
+  & + .cart-item {
+    .cart-item__wrapper {
+      border-top: 1px solid var(--color-background-active);
+    }
+  }
 
   &__wrapper {
     display: grid;
@@ -11,7 +18,6 @@
       "image quantity remove";
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #000;
   }
 
   &__image {
@@ -29,6 +35,16 @@
     grid-area: description;
     display: flex;
     flex-direction: column;
+    padding: 0 10px;
+
+    &-name {
+      font-weight: 700;
+    }
+
+    &-sku {
+      font-size: 12px;
+      padding: 5px 0;
+    }
   }
 
   &__price {

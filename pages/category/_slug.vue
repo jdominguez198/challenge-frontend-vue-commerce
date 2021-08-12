@@ -7,6 +7,7 @@
       :route="$route"
       :route-resolver="$router.resolve"
       :total-pages="totalPages"
+      :currency="currency"
       @click:add-to-cart="handleAddToCart"
     />
   </div>
@@ -20,12 +21,9 @@ import ItemsGrid from '~/components/ItemsGrid/ItemsGrid.vue';
 export default Vue.extend({
   components: { ItemsGrid },
   beforeRouteEnter(to, _, next) {
-    if (!to.params.slug) {
-      return next('/');
-    }
-
-    return next();
+    return !to.params.slug ? next('/') : next();
   },
+  scrollToTop: true,
   async fetch() {
     await this.fetchCategoryItems({
       categoryId: this.$route.params.slug,
@@ -35,7 +33,8 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       categories: 'catalog/categories',
-      pagesInCategory: 'catalog/pagesInCategory'
+      pagesInCategory: 'catalog/pagesInCategory',
+      currency: 'cart/currency'
     }),
     categoryItems () {
       const category = this.$route.params.slug;

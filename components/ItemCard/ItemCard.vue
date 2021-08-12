@@ -5,12 +5,13 @@
         <img :src="image" :alt="name" :title="name" />
       </div>
       <div class="item-card__content">
-        <h3 class="item-card__title">{{ name }}</h3>
-        <span><strong>Level:</strong>{{ level }}</span>
-        <span><strong>HP:</strong>{{ hp }}</span>
+        <h3 class="item-card__content-title">{{ name }}</h3>
+        <span class="item-card__content-line"><strong>Level:</strong>{{ level }}</span>
+        <span class="item-card__content-line"><strong>HP:</strong>{{ hp }}</span>
+        <span class="item-card__content-line"><strong>Price:</strong>{{ price }} {{ currency }}</span>
       </div>
-      <div class="item-card__add-to-cart">
-        <span @click.prevent="handleAddToCart">{{ addToCartText }}</span>
+      <div class="item-card__add-to-cart" @click.prevent="handleAddToCart">
+        <span>{{ addToCartNotification.source }}</span>
       </div>
     </div>
   </div>
@@ -18,6 +19,7 @@
 
 <script>
 import Vue from 'vue';
+import { notifyAddedToCart } from '~/utils/notifyAddedToCart';
 
 export default Vue.extend({
   props: {
@@ -44,36 +46,30 @@ export default Vue.extend({
     price: {
       type: Number,
       default: null
+    },
+    currency: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
-      timerAddToCartText: undefined,
-      defaultAddToCartText: 'Add to Cart',
-      addedAddToCartText: 'Added!',
-      addToCartText: 'Add to Cart',
-      addingToCart: false
+      addToCartNotification: {
+        timer: null,
+        defaultText: 'Add to Cart',
+        addedText: 'Added!',
+        source: 'Add to Cart',
+        isAdding: false
+      }
     }
   },
   methods: {
-    notifyAddedToCart() {
-      if (this.timerAddToCartText) {
-        clearTimeout(this.timerAddToCartText);
-      }
-
-      this.addToCartText = this.addedAddToCartText;
-      this.addingToCart = true;
-      this.timerAddToCartText = setTimeout(() => {
-        this.addToCartText = this.defaultAddToCartText;
-        this.addingToCart = false;
-      }, 1000);
-    },
     handleAddToCart() {
-      if (this.addingToCart) {
+      if (this.addToCartNotification.isAdding) {
         return;
       }
 
-      this.notifyAddedToCart();
+      notifyAddedToCart(this.addToCartNotification);
 
       this.$emit('click:add-to-cart', {
         id: this.id,
