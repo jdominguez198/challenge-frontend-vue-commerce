@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Header from '@/components/Header/Header.vue'
+import Header from '@/components/Header/Header.vue';
 
 describe('Header', () => {
   test('is a Vue instance', () => {

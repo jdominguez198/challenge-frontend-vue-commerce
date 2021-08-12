@@ -1,5 +1,8 @@
 <template>
-  <div class="category-card">
+  <div
+    v-if="title && image"
+    class="category-card"
+  >
     <div class="category-card__wrapper">
       <div class="category-card__image">
         <img :src="image" :alt="title" :title="title" />
@@ -11,18 +14,18 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 
 export default Vue.extend({
   props: {
     title: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
-      required: true
+      default: ''
     }
   }
 });

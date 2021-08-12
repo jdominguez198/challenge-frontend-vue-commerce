@@ -14,6 +14,14 @@
           </li>
         </ul>
       </div>
+      <div class="header__search">
+        <input
+          type="text"
+          name="search"
+          :value="searchTerm"
+          @keyup="$emit('search-term-change', $event.target.value)"
+        />
+      </div>
       <div class="header__actions">
         <ul>
           <li
@@ -25,6 +33,7 @@
               class="header__actions-item"
               @click="actionItem.action"
             />
+            {{ actionItem.label }}
           </li>
         </ul>
       </div>
@@ -32,11 +41,15 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 
 export default Vue.extend({
   props: {
+    searchTerm: {
+      type: String,
+      default: ''
+    },
     navigationItems: {
       type: Array,
       required: true

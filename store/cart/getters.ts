@@ -5,6 +5,8 @@ const getPriceTax = ((qty: number, price: number, tax: number) => qty * price * 
 
 export const getters: GetterTree<CartState, CartState> = {
   items: (state: CartState) => state.items,
+  totalItems: (state: CartState) =>
+    state.items.reduce((accum: number, item: any) => accum + item.qty, 0),
   subtotal: (state: CartState) =>
     state.items.reduce((accum: number, item: any) =>
       accum + item.qty * item.price, 0.0),

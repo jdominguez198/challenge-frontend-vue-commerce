@@ -44,7 +44,9 @@
   &__navigation-item,
   &__actions-item {
     text-decoration: none;
+    color: var(--color-primary);
     padding: 10px 5px;
+    cursor: pointer;
   }
 
 }

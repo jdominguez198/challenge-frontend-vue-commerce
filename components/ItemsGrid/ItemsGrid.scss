@@ -1,0 +1,22 @@
+.items-grid {
+  display: flex;
+  flex-direction: column;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    &-link {
+      text-decoration: none;
+    }
+  }
+}
+
+@media all and (min-width: 769px) {
+  .items-grid {
+    &__list {
+      grid-template-columns: 1fr 1fr;
+      margin: 0 -10px;
+    }
+  }
+}

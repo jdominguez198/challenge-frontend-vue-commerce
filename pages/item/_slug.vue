@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex'
 
@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   async fetch() {
     // (this as any) workaround: https://github.com/vuejs/vue/issues/8721
-    await (this as any).fetchItemDetails(this.$route.params.slug);
+    await this.fetchItemDetails(this.$route.params.slug);
   },
   computed: {
     ...mapGetters({

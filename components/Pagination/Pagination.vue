@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -67,8 +67,6 @@ export default Vue.extend({
       type: Number,
       default: 1
     }
-  },
-  computed: {
   }
 })
 </script>

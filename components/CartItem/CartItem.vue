@@ -9,12 +9,19 @@
         <span class="cart-item__description-sku">SKU: {{ sku }}</span>
       </div>
       <div class="cart-item__price">{{ price }} {{ currency}}</div>
-      <div class="cart-item__quantity">{{ qty }}</div>
+      <div class="cart-item__quantity">
+        <button class="cart-item__quantity-minus" @click="handleDecreaseQty">-</button>
+        <input readonly :value="qty" class="cart-item__quantity-value"/>
+        <button class="cart-item__quantity-plus" @click="handleIncreaseQty">+</button>
+      </div>
+      <div class="cart-item__remove">
+        <font-awesome-icon :icon="[ 'far', 'trash-alt' ]" @click="handleRemoveFromCart" />
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -42,6 +49,17 @@ export default Vue.extend({
     currency: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    handleDecreaseQty () {
+      this.$emit('cart:decrease-qty', { sku: this.sku, currentQty: this.qty })
+    },
+    handleIncreaseQty () {
+      this.$emit('cart:increase-qty', { sku: this.sku, currentQty: this.qty })
+    },
+    handleRemoveFromCart () {
+      this.$emit('cart:remove', this.sku);
     }
   }
 })
