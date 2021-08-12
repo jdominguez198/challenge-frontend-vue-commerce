@@ -63,10 +63,11 @@
 
 <script>
 import Vue from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import CartItem from '~/components/CartItem/CartItem.vue';
 
 export default Vue.extend({
-  components: { CartItem },
+  components: { CartItem, FontAwesomeIcon },
   props: {
     open: {
       type: Boolean,

@@ -1,12 +1,14 @@
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
-import Header from '~/components/Header/Header.vue';
+import Pagination from '~/components/Pagination/Pagination.vue';
 
-describe('Header', () => {
+describe('Pagination', () => {
   test('is a Vue instance', () => {
-    const wrapper = shallowMount(Header, {
+    const wrapper = shallowMount(Pagination, {
       propsData: {
-        title: 'Test',
-        cartTotalItems: 0
+        firstPage: '',
+        nextPage: '',
+        previousPage: '',
+        lastPage: ''
       },
       stubs: {
         NuxtLink: RouterLinkStub

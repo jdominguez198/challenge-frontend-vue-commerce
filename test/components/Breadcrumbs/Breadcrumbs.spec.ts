@@ -1,13 +1,9 @@
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
-import Header from '~/components/Header/Header.vue';
+import Breadcrumbs from '~/components/Breadcrumbs/Breadcrumbs.vue';
 
-describe('Header', () => {
+describe('Breadcrumbs', () => {
   test('is a Vue instance', () => {
-    const wrapper = shallowMount(Header, {
-      propsData: {
-        title: 'Test',
-        cartTotalItems: 0
-      },
+    const wrapper = shallowMount(Breadcrumbs, {
       stubs: {
         NuxtLink: RouterLinkStub
       }

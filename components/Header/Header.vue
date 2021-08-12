@@ -34,8 +34,10 @@
 
 <script>
 import Vue from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default Vue.extend({
+  components: { FontAwesomeIcon },
   props: {
     title: {
       type: String,
